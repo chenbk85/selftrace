@@ -39,7 +39,7 @@ printBacktraceAndFail(int)
 	const int count = 64;
 	static void *buffer[count];
 	backtrace_symbols_fd(buffer, backtrace(buffer, count), STDERR_FILENO);
-	exit(1);
+	exit(EXIT_FAILURE);
 }
 
 int
