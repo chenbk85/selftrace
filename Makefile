@@ -27,9 +27,7 @@ selftrace.stripped: selftrace
 check: selftrace.comp
 	for i in segfault throw; do \
 		echo "# simulating $$i"; \
-		./$< $$i 2>&1 | sed -nre 's@^.*\[([0-9a-fx]*)\]$$@\1@;T;p' \
-			| addr2line --demangle --functions --inlines --pretty-print --exe=./selftrace \
-			| grep -v '^??'; \
+		./$< $$i 2>&1 | ./addr2line.sh selftrace; \
 		echo; \
 	done
 
