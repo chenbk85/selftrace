@@ -2,6 +2,9 @@
 #include <map>
 #include <stdexcept>
 #include <cstdlib>
+#include <signal.h>
+#include <execinfo.h>
+#include <unistd.h> // STDERR_FILENO
 
 void
 dosegfault()
@@ -30,9 +33,20 @@ foo(Action action)
 	bar(action);
 }
 
-int
-main(int argc, char* argv[])
+void
+myhandler(int)
 {
+	void *buffer[32];
+	const int n = backtrace(buffer, sizeof(buffer) / sizeof(buffer[0]));
+	backtrace_symbols_fd(buffer, n, STDERR_FILENO);
+	exit(1);
+}
+
+int
+main(int, char* argv[])
+{
+	signal(SIGSEGV, myhandler);
+	signal(SIGABRT, myhandler);
 	typedef std::map<std::string, Action> Actions;
 	Actions actions;
 	actions["segfault"] = dosegfault;
