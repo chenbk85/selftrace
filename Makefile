@@ -8,8 +8,10 @@ all: selftrace
 .PHONY: check
 check: selftrace
 	for i in segfault throw; do \
-		echo "simulating $$i"; \
-		./selftrace $$i 2>&1 | sed -nre 's@^./selftrace.*\[([0-9a-fx]*)\]$$@\1@;T;p' | addr2line -e ./selftrace; \
+		echo "# simulating $$i"; \
+		./selftrace $$i 2>&1 | sed -nre 's@^./selftrace.*\[([0-9a-fx]*)\]$$@\1@;T;p' \
+			| addr2line --demangle --functions --inlines --pretty-print --exe=./selftrace; \
+		echo; \
 	done
 
 .PHONY: clean

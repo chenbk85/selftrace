@@ -34,19 +34,19 @@ foo(Action action)
 }
 
 void
-myhandler(int)
+printBacktraceAndFail(int)
 {
-	void *buffer[32];
-	const int n = backtrace(buffer, sizeof(buffer) / sizeof(buffer[0]));
-	backtrace_symbols_fd(buffer, n, STDERR_FILENO);
+	const int count = 64;
+	static void *buffer[count];
+	backtrace_symbols_fd(buffer, backtrace(buffer, count), STDERR_FILENO);
 	exit(1);
 }
 
 int
 main(int, char* argv[])
 {
-	signal(SIGSEGV, myhandler);
-	signal(SIGABRT, myhandler);
+	signal(SIGSEGV, printBacktraceAndFail);
+	signal(SIGABRT, printBacktraceAndFail);
 	typedef std::map<std::string, Action> Actions;
 	Actions actions;
 	actions["segfault"] = dosegfault;
@@ -63,6 +63,6 @@ main(int, char* argv[])
 		for (Actions::const_iterator i = actions.begin(); i != actions.end(); ++i) {
 			std::cerr << "\t" << i->first << std::endl;
 		}
-		return EXIT_FAILURE;
 	}
+	return EXIT_FAILURE;
 }
