@@ -1,6 +1,5 @@
 CPPFLAGS += -Os -g
 CPPFLAGS += -Wall -Wextra -pedantic
-#CPPFLAGS += -rdynamic
 CPPFLAGS += -fdata-sections -ffunction-sections
 CPPFLAGS += -fno-align-functions
 LDFLAGS += -Wl,--gc-sections
@@ -20,9 +19,7 @@ selftrace.comp: selftrace.stripped xz-stub.sh
 
 selftrace.stripped: selftrace
 	objcopy --only-keep-debug $< $<.debug
-#	objcopy --strip-debug $< $@
 	objcopy $(addprefix -R ,$(STRIP_SECTIONS)) --strip-all $< $@
-#	objcopy --add-gnu-debuglink=$<.debug $@
 	! type sstrip >/dev/null 2>&1 || sstrip -z $@
 	ls -la $@
 
