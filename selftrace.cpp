@@ -15,7 +15,7 @@ void bar(Action action) { action(); }
 void foo(Action action) { bar(action); }
 
 void
-printBacktraceAndFail(int)
+failWithBacktrace(int)
 {
 	const int count = 64;
 	static void *buffer[count];
@@ -26,8 +26,8 @@ printBacktraceAndFail(int)
 int
 main(int, char* argv[])
 {
-	signal(SIGSEGV, printBacktraceAndFail);
-	signal(SIGABRT, printBacktraceAndFail);
+	signal(SIGSEGV, failWithBacktrace);
+	signal(SIGABRT, failWithBacktrace);
 	typedef std::map<std::string, Action> Actions;
 	Actions actions;
 	actions["segfault"] = dosegfault;

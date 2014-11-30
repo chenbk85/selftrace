@@ -1,10 +1,10 @@
-# Print backtrace on segfault or uncaught exception in C++
+# Print backtrace after segfault or uncaught exception in C++
 
 Here is the output of make check which employs a simple addr2line filter on the
-output of C++ program:
+output of the C++ program:
 
 	# simulating segfault
-	0x00000000004014b2: printBacktraceAndFail(int) at selftrace.cpp:22
+	0x00000000004014b2: failWithBacktrace(int) at selftrace.cpp:22
 	0x00000000004013b6: dosegfault() at selftrace.cpp:9
 	0x0000000000401475: bar(void (*)()) at selftrace.cpp:14
 	0x000000000040148f: foo(void (*)()) at selftrace.cpp:15
@@ -12,14 +12,14 @@ output of C++ program:
 	0x00000000004012b9: _start at ??:?
 
 	# simulating throw
-	0x00000000004014b2: printBacktraceAndFail(int) at selftrace.cpp:22
+	0x00000000004014b2: failWithBacktrace(int) at selftrace.cpp:22
 	0x0000000000401430: dothrow() at selftrace.cpp:10 (discriminator 4)
 	0x0000000000401475: bar(void (*)()) at selftrace.cpp:14
 	0x000000000040148f: foo(void (*)()) at selftrace.cpp:15
 	0x000000000040165f: main at selftrace.cpp:37
 	0x00000000004012b9: _start at ??:?
 
-Faulty program outputs only addresses:
+The faulty C++ program outputs only addresses:
 
 	$ ./selftrace.comp segfault
 	/tmp/I[0x4014b2]
