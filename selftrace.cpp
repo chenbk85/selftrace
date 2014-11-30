@@ -6,32 +6,13 @@
 #include <execinfo.h>
 #include <unistd.h> // STDERR_FILENO
 
-void
-dosegfault()
-{
-	int *p = 0;
-	*p = 0;
-}
-
-void
-dothrow()
-{
-	throw std::runtime_error("my exception");
-}
+void dosegfault() { int *p = 0; *p = 0; }
+void dothrow() { throw std::runtime_error("my exception"); }
 
 typedef void (*Action)();
 
-void
-bar(Action action)
-{
-	action();
-}
-
-void
-foo(Action action)
-{
-	bar(action);
-}
+void bar(Action action) { action(); }
+void foo(Action action) { bar(action); }
 
 void
 printBacktraceAndFail(int)
