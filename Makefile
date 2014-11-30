@@ -1,4 +1,4 @@
-CPPFLAGS += -O2 -g
+CPPFLAGS += -O0 -g
 CPPFLAGS += -Wall -Wextra -pedantic
 #CPPFLAGS += -rdynamic
 
